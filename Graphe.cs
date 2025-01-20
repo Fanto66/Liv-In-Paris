@@ -9,21 +9,17 @@ namespace Liv_In_Paris
 {
     internal class Graphe
     {
-        //Dictionary<string, Noeud> noeuds;
+        //Un graphe correspond à un ensemble de liens
         List<Lien> liens;
-        public Graphe (List<Lien> liens/*List<Lien> liens,Dictionary<string,Noeud> noeuds*/)
+        public Graphe (List<Lien> liens)
         {
-            //this.noeuds = noeuds;
+            
             this.liens = liens;
         }
         public List<Lien> Liens
         {
             get { return this.liens; }
         }
-        /*public Dictionary<string, Noeud> Noeuds
-        {
-            get { return this.noeuds; }
-        }
-        */
+
     }
 }

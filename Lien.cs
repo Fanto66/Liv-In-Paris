@@ -8,6 +8,7 @@ namespace Liv_In_Paris
 {
     internal class Lien
     {
+        //Un Lien est composé de deux sommets/noeuds
         (Noeud, Noeud) couple;
         public Lien((Noeud, Noeud) couple)
         {

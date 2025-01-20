@@ -8,6 +8,7 @@ namespace Liv_In_Paris
 {
     internal class Noeud
     {
+        //Un noeud à un nom
         string nom;
         
         public Noeud(string nom)
