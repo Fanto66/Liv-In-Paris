@@ -1,9 +1,36 @@
-﻿using System.ComponentModel.Design;
+﻿using System;
+using System.ComponentModel.Design;
+using System.Numerics;
 
 namespace Liv_In_Paris
 {
     internal class Program
     {
+
+        static void AfficherMatrice(int[,] mat)
+        {
+            for (int i = 0; i < mat.GetLength(0); i++)
+            {
+                for (int j = 0; j < mat.GetLength(1); j++)
+                {
+                    Console.Write(mat[i, j]);
+                }
+                Console.WriteLine();
+            }
+        }
+
+
+
+        static List<Noeud> DFS(Graphe graphe, Noeud depart)
+        {
+
+        }
+
+
+
+
+
+
         /// <summary>
         /// Si les deux éléments sont égaux, on ajoute une fois en temps que clé et valeur
         /// Sinon 
@@ -14,12 +41,12 @@ namespace Liv_In_Paris
         /// </summary>
         /// <param name="graphe">c'est le graphe que l'on a créé</param>
         /// <returns>On retourne la liste d'adjacence </returns>
-        public static Dictionary<string,List<string>> ListeAdjacence(Graphe graphe)
+        public static Dictionary<string, List<string>> ListeAdjacence(Graphe graphe)
         {
-            Dictionary<string,List<string>> dico = new Dictionary<string,List<string>>();
-            foreach(Lien lien in graphe.Liens)
+            Dictionary<string, List<string>> dico = new Dictionary<string, List<string>>();
+            foreach (Lien lien in graphe.Liens)
             {
-                if (lien.Couple.Item1.Nom== lien.Couple.Item2.Nom)
+                if (lien.Couple.Item1.Nom == lien.Couple.Item2.Nom)
                 {
                     if (dico.ContainsKey(lien.Couple.Item1.Nom))
                     {
@@ -61,7 +88,7 @@ namespace Liv_In_Paris
             }
             return dico;
 
-            
+
         }
         //Marche pour un graphe avec des sommets qui sont des entiers
         //C'est censé être symétrique normalement d'après le cours, il faudrait aussi que ça soit trié, ce qui n'est pas le cas ici
@@ -76,7 +103,7 @@ namespace Liv_In_Paris
                     //Console.WriteLine("("+clef+","+adja+")");
                     mat[Convert.ToInt32(clef)-1, Convert.ToInt32(adja)-1] = 1;
                 }
-                
+
             }
             return mat;
         }
@@ -114,32 +141,36 @@ namespace Liv_In_Paris
             //Le fichier est transformer en tableau de lignes
             string[] lignes = File.ReadAllLines(@"..\..\..\soc-karate.mtx");
             List<Lien> liens = new List<Lien>();
-            
+
             //Pour chaque ligne du fichier
-            foreach(string ligne in lignes)
+            foreach (string ligne in lignes)
             {
-                
-                if (ligne[0]!='%')
+
+                if (ligne[0] != '%')
                 {
                     string[] motsLigne = ligne.Split(' ');      //Pour chaque ligne, on la divise en tableau de mots
                     Noeud noeud1 = new Noeud(motsLigne[0]);
                     Noeud noeud2 = new Noeud(motsLigne[1]);     //On crée des noeuds
-                    Lien lien = new Lien((noeud1,noeud2));      //Avec les noeuds on fait des liens
+                    Lien lien = new Lien((noeud1, noeud2));     //Avec les noeuds on fait des liens
+
                     liens.Add(lien);                            //Qu'on ajoute dans la liste de liens
                 }
             }
+
+
+
             Graphe graphe = new Graphe(liens);
             Dictionary<string, List<string>> lAdjacence = ListeAdjacence(graphe);
 
             //Affichage Liste Adjacence
-            foreach(var ele in lAdjacence)
+            foreach (var ele in lAdjacence)
             {
-                Console.Write(ele.Key +" : ");
-                foreach(string noeud in ele.Value)
+                Console.Write(ele.Key + " : ");
+                foreach (string noeud in ele.Value)
                 {
-                    Console.Write(noeud +" ");
+                    Console.Write(noeud + " ");
                 }
-                
+
                 Console.WriteLine();
             }
 
@@ -147,20 +178,14 @@ namespace Liv_In_Paris
 
             //Affichage Matrice Adjacence
             Console.WriteLine();
+            AfficherMatrice(mat);
+
 
             for (int i =0; i < mat.GetLength(0);i++)
             {
                 for (int j =0; j <mat.GetLength(1);j++)
                 {
-                    if (mat[i,j] ==0)
-                    {
-                        Console.Write("* ");
-                    }
-                    else
-                    {
-                        Console.Write(mat[i, j] + " ");
-                    }
-                    
+                    Console.Write(mat[i, j]);
                 }
                 Console.WriteLine();
             }
