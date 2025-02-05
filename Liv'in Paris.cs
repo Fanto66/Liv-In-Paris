@@ -98,7 +98,7 @@ namespace Liv_In_Paris
             List<int> visites = new List<int>();
             List<int> termines = new List<int>();
 
-            Dictionary<string, string> couleur = new Dictionary<string, string>();
+            Dictionary<string, string> couleur = new Dictionary<string, string>(); //cle : le sommet, value : la couleur
             Dictionary<string, string> predecesseur = new Dictionary<string, string>();
             foreach ( Lien lien in graphe)
             {
