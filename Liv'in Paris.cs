@@ -65,20 +65,49 @@ namespace Liv_In_Paris
         }
         //Marche pour un graphe avec des sommets qui sont des entiers
         //C'est censé être symétrique normalement d'après le cours, il faudrait aussi que ça soit trié, ce qui n'est pas le cas ici
-        public static int[,] MatriceAdjacence(Graphe graphe)
+        public static int[,] MatriceAdjacence(Dictionary<string,List<string>> lAdjacence)
         {
-            int[,] mat = new int[graphe.Liens.Count, graphe.Liens.Count];
-            foreach(Lien lien1 in graphe.Liens)
+            int[,] mat = new int[lAdjacence.Count, lAdjacence.Count];
+            foreach(string clef in lAdjacence.Keys)
 
             {
-                foreach(Lien lien2 in graphe.Liens)
+                foreach(string adja in lAdjacence[clef])
                 {
-                    mat[Convert.ToInt32(lien1.Couple.Item1.Nom), Convert.ToInt32(lien2.Couple.Item2.Nom)] = 1;
+                    //Console.WriteLine("("+clef+","+adja+")");
+                    mat[Convert.ToInt32(clef)-1, Convert.ToInt32(adja)-1] = 1;
                 }
                 
             }
             return mat;
         }
+        /// <summary>
+        /// Parcours en profondeur
+        /// </summary>
+        /// <param name="args"></param>
+        public static void ParcoursProfondeur()
+        {
+
+        }
+        /// <summary>
+        /// Parcours en largeur 
+        /// </summary>
+        /// <param name="args"></param>
+        public static (List<string>, List<string>) ParcoursLargeur(Graphe graphe, Noeud noeud)
+        {
+            Queue<string> file = new Queue<string>();
+            List<int> visites = new List<int>();
+            List<int> termines = new List<int>();
+
+            Dictionary<string, string> couleur = new Dictionary<string, string>();
+            Dictionary<string, string> predecesseur = new Dictionary<string, string>();
+            foreach ( Lien lien in graphe)
+            {
+
+            }
+        }
+
+
+        
         static void Main(string[] args)
         {
             //Comme le fichier est petit, on utilise ReadAllLines au lieu d'un streamReader
@@ -114,7 +143,7 @@ namespace Liv_In_Paris
                 Console.WriteLine();
             }
 
-            int[,] mat = MatriceAdjacence(graphe);
+            int[,] mat = MatriceAdjacence(lAdjacence);
 
             //Affichage Matrice Adjacence
             Console.WriteLine();
@@ -123,11 +152,20 @@ namespace Liv_In_Paris
             {
                 for (int j =0; j <mat.GetLength(1);j++)
                 {
-                    Console.Write(mat[i, j]);
+                    if (mat[i,j] ==0)
+                    {
+                        Console.Write("* ");
+                    }
+                    else
+                    {
+                        Console.Write(mat[i, j] + " ");
+                    }
+                    
                 }
                 Console.WriteLine();
             }
             Console.ReadKey();
         }
+        
     }
 }
