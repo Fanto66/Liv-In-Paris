@@ -6,7 +6,10 @@ namespace Liv_In_Paris
 {
     internal class Program
     {
-
+        /// <summary>
+        /// Affiche une matrice d'entiers
+        /// </summary>
+        /// <param name="mat">Matrice à afficher</param>
         static void AfficherMatrice(int[,] mat)
         {
             for (int i = 0; i < mat.GetLength(0); i++)
@@ -19,11 +22,46 @@ namespace Liv_In_Paris
             }
         }
 
-
-
-        static List<Noeud> DFS(Graphe graphe, Noeud depart)
+        /// <summary>
+        /// Fonction auxiliaire au parcours en profondeur
+        /// </summary>
+        /// <param name="adj">liste d'adjacence du graphe</param>
+        /// <param name="depart">noeud actuel</param>
+        /// <param name="visite">tableau des noeuds visités</param>
+        /// <param name="chemin">chemin suivi</param>
+        /// <returns>Liste des noeuds effectués</returns>
+        static List<string> DFS_Rec(Dictionary<string, List<string>> adj, string depart, bool[] visite, List<string> chemin)
         {
 
+            visite[int.Parse(depart) - 1] = true;
+            chemin.Add(depart);
+
+            foreach (string s in adj[depart])
+            {
+                if (!visite[int.Parse(s) - 1])
+                {
+
+                    DFS_Rec(adj, s, visite, chemin);
+                }
+
+            }
+            return chemin;
+        }
+
+        /// <summary>
+        /// Parcourt un graphe en profondeur.
+        /// </summary>
+        /// <param name="graphe">Graphe à parcourir</param>
+        /// <param name="depart">Noeud de départ</param>
+        /// <returns>Trajet effectué</returns>
+        static List<string> DFS(Graphe graphe, string depart)
+        {
+            Dictionary<string, List<string>> listeAdj = graphe.ListeAdjacence;
+            bool[] visite = new bool[listeAdj.Count];
+
+            List<string> chemin = new List<string>();
+
+            return DFS_Rec(listeAdj, depart, visite, chemin);
         }
 
 
@@ -92,16 +130,16 @@ namespace Liv_In_Paris
         }
         //Marche pour un graphe avec des sommets qui sont des entiers
         //C'est censé être symétrique normalement d'après le cours, il faudrait aussi que ça soit trié, ce qui n'est pas le cas ici
-        public static int[,] MatriceAdjacence(Dictionary<string,List<string>> lAdjacence)
+        public static int[,] MatriceAdjacence(Dictionary<string, List<string>> lAdjacence)
         {
             int[,] mat = new int[lAdjacence.Count, lAdjacence.Count];
-            foreach(string clef in lAdjacence.Keys)
+            foreach (string clef in lAdjacence.Keys)
 
             {
-                foreach(string adja in lAdjacence[clef])
+                foreach (string adja in lAdjacence[clef])
                 {
                     //Console.WriteLine("("+clef+","+adja+")");
-                    mat[Convert.ToInt32(clef)-1, Convert.ToInt32(adja)-1] = 1;
+                    mat[Convert.ToInt32(clef) - 1, Convert.ToInt32(adja) - 1] = 1;
                 }
 
             }
@@ -119,22 +157,22 @@ namespace Liv_In_Paris
         /// Parcours en largeur 
         /// </summary>
         /// <param name="args"></param>
-        public static (List<string>, List<string>) ParcoursLargeur(Graphe graphe, Noeud noeud)
-        {
-            Queue<string> file = new Queue<string>();
-            List<int> visites = new List<int>();
-            List<int> termines = new List<int>();
+        //public static (List<string>, List<string>) ParcoursLargeur(Graphe graphe, Noeud noeud)
+        //{
+        //    Queue<string> file = new Queue<string>();
+        //    List<int> visites = new List<int>();
+        //    List<int> termines = new List<int>();
 
-            Dictionary<string, string> couleur = new Dictionary<string, string>();
-            Dictionary<string, string> predecesseur = new Dictionary<string, string>();
-            foreach ( Lien lien in graphe)
-            {
+        //    Dictionary<string, string> couleur = new Dictionary<string, string>();
+        //    Dictionary<string, string> predecesseur = new Dictionary<string, string>();
+        //    foreach (Lien lien in graphe)
+        //    {
 
-            }
-        }
+        //    }
+        //}
 
 
-        
+
         static void Main(string[] args)
         {
             //Comme le fichier est petit, on utilise ReadAllLines au lieu d'un streamReader
@@ -181,16 +219,26 @@ namespace Liv_In_Paris
             AfficherMatrice(mat);
 
 
-            for (int i =0; i < mat.GetLength(0);i++)
+            for (int i = 0; i < mat.GetLength(0); i++)
             {
-                for (int j =0; j <mat.GetLength(1);j++)
+                for (int j = 0; j < mat.GetLength(1); j++)
                 {
                     Console.Write(mat[i, j]);
                 }
                 Console.WriteLine();
             }
             Console.ReadKey();
+
+
+
+
+            graphe.ListeAdjacence = lAdjacence;
+
+            List<string> dfs = DFS(graphe, "34");
+            Console.WriteLine(string.Join(" ", dfs));
+
+
         }
-        
+
     }
 }
