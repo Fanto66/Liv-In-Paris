@@ -148,14 +148,7 @@ namespace Liv_In_Paris
             }
             return mat;
         }
-        /// <summary>
-        /// Parcours en profondeur
-        /// </summary>
-        /// <param name="args"></param>
-        public static void ParcoursProfondeur()
-        {
 
-        }
         /// <summary>
         /// Parcours en largeur 
         /// </summary>
@@ -251,10 +244,10 @@ namespace Liv_In_Paris
 
 
 
-            graphe.ListeAdjacence = lAdjacence;
+            /*graphe.ListeAdjacence = lAdjacence;
 
             List<string> dfs = DFS(graphe, "34");
-            Console.WriteLine(string.Join(" ", dfs));
+            Console.WriteLine(string.Join(" ", dfs));*/
 
 
         }
