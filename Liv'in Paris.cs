@@ -21,10 +21,11 @@ namespace Liv_In_Paris
 
 
 
-        static List<Noeud> DFS(Graphe graphe, Noeud depart)
+        /*static List<Noeud> DFS(Graphe graphe, Noeud depart)
         {
 
         }
+        */
 
 
 
@@ -90,8 +91,11 @@ namespace Liv_In_Paris
 
 
         }
-        //Marche pour un graphe avec des sommets qui sont des entiers
-        //C'est censé être symétrique normalement d'après le cours, il faudrait aussi que ça soit trié, ce qui n'est pas le cas ici
+        /// <summary>
+        /// Cette méthode donne la matrice d'adjacence d'un graphe
+        /// </summary>
+        /// <param name="lAdjacence"> La clé du dictionnaire correspond aux sommets et la valeur correspond à la liste des sommets adjacents à chaque sommet </param>
+        /// <returns> on retourne une matrice d'adjacence, lorsque deux sommets sont adjacents, on met un 1, sinon un 0</returns>
         public static int[,] MatriceAdjacence(Dictionary<string,List<string>> lAdjacence)
         {
             int[,] mat = new int[lAdjacence.Count, lAdjacence.Count];
@@ -119,18 +123,31 @@ namespace Liv_In_Paris
         /// Parcours en largeur 
         /// </summary>
         /// <param name="args"></param>
-        public static (List<string>, List<string>) ParcoursLargeur(Graphe graphe, Noeud noeud)
+        public static (List<string>, List<string>) ParcoursLargeur(Dictionary<string, List<string>> lAdjacence, Noeud depart)
         {
-            Queue<string> file = new Queue<string>();
-            List<int> visites = new List<int>();
-            List<int> termines = new List<int>();
+            Queue<Noeud> file = new Queue<Noeud>();
 
-            Dictionary<string, string> couleur = new Dictionary<string, string>(); //cle : le sommet, value : la couleur
-            Dictionary<string, string> predecesseur = new Dictionary<string, string>();
-            foreach ( Lien lien in graphe)
+            List<string> visites = new List<string>();
+            List<string> termines = new List<string>();
+
+
+            file.Enqueue(depart);
+            visites.Add(depart.Nom);
+
+            while (file.Count>0)
             {
+                Noeud actuel = file.Dequeue();
+                termines.Add(actuel.Nom);
 
+                foreach(string adja in lAdjacence[actuel.Nom])
+                {
+                    if (!visites.Contains(adja))
+                    {
+                        visites.Add(adja);
+                    }
+                }
             }
+            return (visites, termines);
         }
 
 
@@ -141,6 +158,7 @@ namespace Liv_In_Paris
             //Le fichier est transformer en tableau de lignes
             string[] lignes = File.ReadAllLines(@"..\..\..\soc-karate.mtx");
             List<Lien> liens = new List<Lien>();
+            List<Noeud> listeNoeud = new List<Noeud>();
 
             //Pour chaque ligne du fichier
             foreach (string ligne in lignes)
@@ -153,7 +171,9 @@ namespace Liv_In_Paris
                     Noeud noeud2 = new Noeud(motsLigne[1]);     //On crée des noeuds
                     Lien lien = new Lien((noeud1, noeud2));     //Avec les noeuds on fait des liens
 
+                    
                     liens.Add(lien);                            //Qu'on ajoute dans la liste de liens
+                    listeNoeud.Add(noeud1);                     //Liste de tous les noeuds
                 }
             }
 
