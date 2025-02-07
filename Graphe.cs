@@ -12,7 +12,7 @@ namespace Liv_In_Paris
         //Un graphe correspond à un ensemble de liens
         private List<Lien> liens;
         private Dictionary<string, List<string>> listeAdjacence;
-        private int[,] adjacence;
+        private int[,] matAdjacence;
         public Graphe(List<Lien> liens)
         {
 
@@ -23,14 +23,16 @@ namespace Liv_In_Paris
             get { return this.liens; }
         }
 
-        public int[,] Adjacence
+        public int[,] MatAdjacence
         {
-            get { return this.adjacence; }
+            get { return this.matAdjacence; }
+
 
         }
         public Dictionary<string, List<string>> ListeAdjacence
         {
             get { return this.listeAdjacence; }
+            set { this.listeAdjacence = value; }
         }
     }
 }
