@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.Numerics;
 
 namespace Liv_In_Paris
@@ -150,9 +151,11 @@ namespace Liv_In_Paris
         }
 
         /// <summary>
-        /// Parcours en largeur 
+        /// Le parcours en profondeur permet d'explorer chaque branche de la même profondeur avant de passer à la profondeur suivante
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="lAdjacence"> Correspond au résultat de la méthode ListeAdjacence </param>
+        /// <param name="depart"> Correspond au noeud à partir duquel on veut partir</param>
+        /// <returns> On retourne la liste de marquage des sommets visités et des sommets terminés</returns>
         public static (List<string>, List<string>) ParcoursLargeur(Dictionary<string, List<string>> lAdjacence, Noeud depart)
         {
             Queue<Noeud> file = new Queue<Noeud>();
@@ -179,7 +182,44 @@ namespace Liv_In_Paris
             }
             return (visites, termines);
         }
+        /// <summary>
+        /// Cet algorithme permet, à partir d'une liste de sommets visités lors d'un parcours en longueur ou en largeur, de vérifier si le graphe est connexe ou non à partir d'un certain point
+        /// Pour cela, on utilise la liste de noeuds, si le nombre de noeuds du graphe est égale au nombre de noeuds visités, alors le graphe est connnexe
+        /// </summary>
+        /// <param name="visites"> la liste des noeuds visités lors d'un parcours en largeur ou en profondeur</param>
+        /// <param name="listeNoeuds"> Correspond à la liste totale des noeuds </param>
+        /// <returns>Un bouléen qui dit si le graphe est connexe ou non</returns>
+        public static bool Connexe(List<string> visites,List<Noeud> listeNoeuds)
+        {
+            bool connexe = false;
+            
+            if(visites!=null)
+            {
+                if (visites.Count == listeNoeuds.Count)             //Cette méthode marche uniquement pour les graphes non-orientés, comme celui que l'on a ici car lorsqu'il est orienté, on ne peut pas forcément acceder à tous les sommets grâce à une seul, pourtant le graphe peut être connexe
+                {
+                    connexe = true;
+                }
+                
+            }
+            return connexe;
 
+
+        }
+        //Il fait au moins trois sommets pour un circuit
+        public static bool Circuits(int profondeur, Dictionary<string, List<string>> listeAdjacence, int comp =1)
+        {
+            bool circuits = false;
+            
+            List<string> visites = new List<string>();
+            foreach(string sommet in listeAdjacence.Keys)
+            {
+                if (!visites.Contains(sommet))
+                {
+
+                }
+                
+            return circuits;
+        }
 
 
         static void Main(string[] args)
@@ -248,6 +288,8 @@ namespace Liv_In_Paris
 
             List<string> dfs = DFS(graphe, "34");
             Console.WriteLine(string.Join(" ", dfs));*/
+
+            
 
 
         }
