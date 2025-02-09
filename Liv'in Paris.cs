@@ -2,6 +2,7 @@
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Numerics;
+using System.Reflection.Metadata;
 
 namespace Liv_In_Paris
 {
@@ -50,7 +51,7 @@ namespace Liv_In_Paris
         }
 
         /// <summary>
-        /// Parcourt un graphe en profondeur.
+        /// Parcoure un graphe en profondeur.
         /// </summary>
         /// <param name="graphe">Graphe à parcourir</param>
         /// <param name="depart">Noeud de départ</param>
@@ -182,6 +183,7 @@ namespace Liv_In_Paris
             }
             return (visites, termines);
         }
+        
         /// <summary>
         /// Cet algorithme permet, à partir d'une liste de sommets visités lors d'un parcours en longueur ou en largeur, de vérifier si le graphe est connexe ou non à partir d'un certain point
         /// Pour cela, on utilise la liste de noeuds, si le nombre de noeuds du graphe est égale au nombre de noeuds visités, alors le graphe est connnexe
@@ -205,21 +207,60 @@ namespace Liv_In_Paris
 
 
         }
-        //Il fait au moins trois sommets pour un circuit
-        public static bool Circuits(int profondeur, Dictionary<string, List<string>> listeAdjacence, int comp =1)
-        {
-            bool circuits = false;
-            
-            List<string> visites = new List<string>();
-            foreach(string sommet in listeAdjacence.Keys)
-            {
-                if (!visites.Contains(sommet))
-                {
 
-                }
-                
-            return circuits;
+
+        /// <summary>
+        /// Verifie si le graphe contient un circuit
+        /// </summary>
+        /// <param name="graphe">Graphe a verifier</param>
+        /// <returns>Vrai si il contient un circuit, faux sinon</returns>
+        static bool Circuit(Graphe graphe)
+        {
+            Dictionary<string, List<string>> listeAdj = graphe.ListeAdjacence;
+            bool[] visite = new bool[listeAdj.Count];
+            var keys = listeAdj.Keys.ToList();
+
+
+            return Circuit_Rec(listeAdj, keys[0], null ,visite);
         }
+
+        /// <summary>
+        /// Fonction recursive auxiliaire
+        /// </summary>
+        /// <param name="Adj">Liste d'ajacence</param>
+        /// <param name="current">Noeud actuel</param>
+        /// <param name="parent">Noeud parent</param>
+        /// <param name="visite">Liste des noeuds visites</param>
+        /// <returns>Vrai ou faux</returns>
+        static bool Circuit_Rec(Dictionary<string, List<string>> Adj,string current, string parent, bool[] visite)
+        {
+            visite[int.Parse(current)-1] = true;
+
+            foreach (string enfant in Adj[current])
+            {
+                if (!visite[int.Parse(enfant)-1])
+                {
+                    if (Circuit_Rec(Adj, enfant, current, visite))
+                    {
+                        return true;
+                    }
+                    
+                }
+                else
+                {
+                    if (enfant != parent)
+                    {
+                        return true;
+                    }
+                }
+
+            }
+            return false;
+
+
+        }
+
+
 
 
         static void Main(string[] args)
@@ -279,17 +320,18 @@ namespace Liv_In_Paris
                 }
                 Console.WriteLine();
             }
-            Console.ReadKey();
 
 
 
 
-            /*graphe.ListeAdjacence = lAdjacence;
+            graphe.ListeAdjacence = lAdjacence;
 
             List<string> dfs = DFS(graphe, "34");
-            Console.WriteLine(string.Join(" ", dfs));*/
+            Console.WriteLine(string.Join(" ", dfs));
 
-            
+
+            Console.Write(Circuit(graphe));
+
 
 
         }
