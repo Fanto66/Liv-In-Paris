@@ -182,6 +182,7 @@ namespace LivinParis
 
         #endregion
 
+        public static Graphe graphe;
 
         /// <summary>
         /// The main entry point for the application.
@@ -225,7 +226,7 @@ namespace LivinParis
 
 
 
-            Form1 form = new Form1();
+            Form1 form = new Form1(graphe.ListeAdjacence);
             form.TexteCheminDFSLabel = String.Join(" -> ", chemin);       //On affiche le chemin dans le label1
 
             Application.Run(form);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LivinParis
 {
-    internal class Noeud
+    public class Noeud
     {
         //Un noeud à un nom
         string nom;

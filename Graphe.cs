@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LivinParis
 {
-    internal class Graphe
+    public class Graphe
     {
         //Un graphe correspond à un ensemble de liens
         private List<Lien> liens;

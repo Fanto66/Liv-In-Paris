@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LivinParis
 {
-    internal class Lien
+    public class Lien
     {
         //Un Lien est composé de deux sommets/noeuds
         (Noeud, Noeud) couple;
