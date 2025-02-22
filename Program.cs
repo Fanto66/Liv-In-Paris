@@ -226,7 +226,7 @@ namespace LivinParis
 
 
 
-            Form1 form = new Form1(graphe.ListeAdjacence);
+            Form1 form = new Form1(graphe);
             form.TexteCheminDFSLabel = String.Join(" -> ", chemin);       //On affiche le chemin dans le label1
 
             Application.Run(form);

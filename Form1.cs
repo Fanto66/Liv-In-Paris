@@ -15,6 +15,9 @@ namespace LivinParis
         // Facteur d'échelle pour le redimensionnement du graphe
         private int facteurEchelle = 300;
 
+
+        private DataTable table = new DataTable();
+
         // Liste d'adjacence représentant le graphe
         private Dictionary<string, List<string>> listeAdj;
         // Indicateur pour savoir si le graphe doit être dessiné
@@ -25,10 +28,23 @@ namespace LivinParis
         /// Initialise les composants et la liste d'adjacence.
         /// </summary>
         /// <param name="listeAdj">Liste d'adjacence représentant le graphe</param>
-        public Form1(Dictionary<string, List<string>> listeAdj)
+        public Form1(Graphe graphe)
         {
             InitializeComponent();
-            this.listeAdj = listeAdj;
+            this.listeAdj = graphe.ListeAdjacence;
+            // Create a DataTable to represent the adjacency list
+            this.table.Columns.Add("Noeud", typeof(string));
+            this.table.Columns.Add("Noueds Adjacents", typeof(string));
+
+            // Populate the DataTable with the adjacency list data
+            foreach (var noeud in listeAdj)
+            {
+                string adjacentNodes = string.Join(", ", noeud.Value);
+                table.Rows.Add(noeud.Key, adjacentNodes);
+            }
+
+            // Bind the DataTable to the DataGridView
+            TableauListeAdj.DataSource = table;
         }
 
         /// <summary>
@@ -44,26 +60,31 @@ namespace LivinParis
         /// Gestionnaire d'événements pour le clic sur le bouton de chemin DFS.
         /// Affiche ou cache le label de chemin DFS.
         /// </summary>
-        private void button1_Click(object sender, EventArgs e)
+        private void BoutonDFSClick(object sender, EventArgs e)
         {
             TexteCheminDFS.Visible = !TexteCheminDFS.Visible;
             PanelGraphe.Visible = false;
+            TableauListeAdj.Visible = false;
 
             BoutonCheminDFS.Text = (TexteCheminDFS.Visible) ? "Cacher Chemin DFS" : "Afficher Chemin DFS";
             BoutonAfficherGraphe.Text = (PanelGraphe.Visible) ? "Cacher Graphe" : "Afficher Graphe";
+            BoutonListeAdj.Text = (TableauListeAdj.Visible) ? "Cacher Liste d'adjacence" : "Afficher Liste d'adjacence";
+
         }
 
         /// <summary>
         /// Gestionnaire d'événements pour le clic sur le bouton d'affichage du graphe.
         /// Affiche ou cache le panel du graphe.
         /// </summary>
-        private void button1_Click_1(object sender, EventArgs e)
+        private void BoutonGrapheClick(object sender, EventArgs e)
         {
             PanelGraphe.Visible = !PanelGraphe.Visible;
             TexteCheminDFS.Visible = false;
+            TableauListeAdj.Visible = false;
 
             BoutonAfficherGraphe.Text = (PanelGraphe.Visible) ? "Cacher Graphe" : "Afficher Graphe";
             BoutonCheminDFS.Text = (TexteCheminDFS.Visible) ? "Cacher Chemin DFS" : "Afficher Chemin DFS";
+            BoutonListeAdj.Text = (TableauListeAdj.Visible) ? "Cacher Liste d'adjacence" : "Afficher Liste d'adjacence";
 
             if (PanelGraphe.Visible)
             {
@@ -71,6 +92,20 @@ namespace LivinParis
                 PanelGraphe.Invalidate();
             }
         }
+
+        private void BoutonListeAdjClick(object sender, EventArgs e)
+        {
+            PanelGraphe.Visible = false;
+            TexteCheminDFS.Visible = false;
+            TableauListeAdj.Visible = !TableauListeAdj.Visible;
+
+            BoutonAfficherGraphe.Text = (PanelGraphe.Visible) ? "Cacher Graphe" : "Afficher Graphe";
+            BoutonCheminDFS.Text = (TexteCheminDFS.Visible) ? "Cacher Chemin DFS" : "Afficher Chemin DFS";
+            BoutonListeAdj.Text = (TableauListeAdj.Visible) ? "Cacher Liste d'adjacence" : "Afficher Liste d'adjacence";
+        }
+
+
+
 
         /// <summary>
         /// Gestionnaire d'événements pour le chargement du formulaire.
@@ -192,5 +227,13 @@ namespace LivinParis
                 g.DrawString(node.Key, font, Brushes.White, pos.X - rayonNoeud / 2, pos.Y - rayonNoeud / 2);
             }
         }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+
+
     }
 }
