@@ -21,13 +21,13 @@ pdp_url TEXT
 CREATE TABLE IF NOT EXISTS Clients (
 nom_utilisateur_client VARCHAR(50) PRIMARY KEY,
 nom_utilisateur VARCHAR(50),
-FOREIGN KEY (nom_utilisateur) REFERENCES Utilisateurs(nom_utilisateur)
+FOREIGN KEY (nom_utilisateur) REFERENCES Utilisateurs(nom_utilisateur) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Cuisiniers (
 nom_utilisateur_cuisinier VARCHAR(50) PRIMARY KEY,
 nom_utilisateur VARCHAR(50),
-FOREIGN KEY (nom_utilisateur) REFERENCES Utilisateurs(nom_utilisateur)
+FOREIGN KEY (nom_utilisateur) REFERENCES Utilisateurs(nom_utilisateur) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Livraisons (
@@ -128,7 +128,12 @@ VALUES ("marie.dupond", "marie.dupond");
 INSERT INTO Utilisateurs (nom_utilisateur, mot_de_passe, nom, prenom, rue, numero, code_postal, ville, telephone, email, metro_plus_proche)  
 VALUES ("jean.lemaitre", "pass1234!", "Lemaitre", "Jean", "Avenue des Champs-Elysees", 12, 75008, "Paris", "0612345678", "jean.lemaitre@gmail.com", "Franklin D. Roosevelt");  
 INSERT INTO Cuisiniers(nom_utilisateur_cuisinier, nom_utilisateur)  
-VALUES ("jean.lemaitre", "jean.lemaitre");  
+VALUES ("jean.lemaitre", "jean.lemaitre");
+
+INSERT INTO Utilisateurs (nom_utilisateur, mot_de_passe, nom, prenom, rue, numero, code_postal, ville, telephone, email, metro_plus_proche)  
+VALUES ("pablo.laxago", "motdepassechokbar", "Pablo", "Laxago", "Avenue Léonard de Vinci", 12, 92400, "Courbevoie", "0612344678", "pablo.laxago@gmail.com", "La Defense Grande Arche");  
+INSERT INTO Cuisiniers(nom_utilisateur_cuisinier, nom_utilisateur)  
+VALUES ("pablo.laxago", "pablo.laxago");
 
 --Ingredients
 INSERT INTO Ingredients
@@ -143,10 +148,22 @@ INSERT INTO Ingredients
 VALUES (5, "Oignons");
 INSERT INTO Ingredients
 VALUES (6, "Bechamel");
+INSERT INTO Ingredients
+VALUES (7, "Riz");
+INSERT INTO Ingredients
+VALUES (8, "Poivron rouge");
+INSERT INTO Ingredients
+VALUES (9, "Poivron vert");
+INSERT INTO Ingredients
+VALUES (10, "Ail");
+INSERT INTO Ingredients
+VALUES (11, "Gambas");
+INSERT INTO Ingredients
+VALUES (12, "Poulet");
 
 --Plats
 INSERT INTO Plats (id_plat, nom, prix, quantite, type_plat, date_fabrication, date_peremption, regime, nationalite, disponible, nom_utilisateur_cuisinier)
-VALUES (1, "Pizza", 12.50, 4, "Plat congelé", "20250224", "20250315", "Omnivore", "Italienne", TRUE, "marie.dupond");
+VALUES (1, "Pizza", 15.50, 4, "Plat congelé", "20250224", "20250315", "Omnivore", "Italienne", TRUE, "marie.dupond");
 INSERT INTO Composition_Plats (id_plat, id_ingredient, quantite)
 VALUES (1, 1, 200);
 INSERT INTO Composition_Plats (id_plat, id_ingredient, quantite)
@@ -173,6 +190,25 @@ INSERT INTO Composition_Plats (id_plat, id_ingredient, quantite)
 VALUES (3, 1, 75);
 INSERT INTO Composition_Plats (id_plat, id_ingredient, quantite)
 VALUES (3, 4, 175);
+
+INSERT INTO Plats (id_plat, nom, prix, quantite, type_plat, date_fabrication, date_peremption, regime, nationalite, disponible, nom_utilisateur_cuisinier)
+VALUES (4, "Paella", 28.75, 3, "Plat chaud", "20250227", "20250228", "Omnivore", "Espagnol", TRUE, "pablo.laxago")
+INSERT INTO Composition_Plats (id_plat, id_ingredient, quantite)
+VALUES (3, 7, 225); -- riz
+INSERT INTO Composition_Plats (id_plat, id_ingredient, quantite)
+VALUES (3, 8, 80); -- rouge
+INSERT INTO Composition_Plats (id_plat, id_ingredient, quantite)
+VALUES (3, 9, 80); -- vert
+INSERT INTO Composition_Plats (id_plat, id_ingredient, quantite)
+VALUES (3, 10, 10); -- ail
+INSERT INTO Composition_Plats (id_plat, id_ingredient, quantite)
+VALUES (3, 11, 300); -- gambas
+INSERT INTO Composition_Plats (id_plat, id_ingredient, quantite)
+VALUES (3, 1, 150); -- tomate
+INSERT INTO Composition_Plats (id_plat, id_ingredient, quantite)
+VALUES (3, 1, 50); -- oignon
+INSERT INTO Composition_Plats (id_plat, id_ingredient, quantite)
+VALUES (3, 12, 450); -- poulet
 
 --Transactions & livraisons
 --Commande de 1 Lasagne
