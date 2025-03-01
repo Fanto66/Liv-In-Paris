@@ -44,20 +44,20 @@ namespace LivinParis
                 table.Rows.Add(noeud.Key, adjacentNodes);
             }
 
-            // Bind the DataTable to the DataGridView
+
             TableauListeAdj.DataSource = table;
 
             int[,] matAdjacence = graphe.MatAdjacence;
             DataTable dataTable = new DataTable();
 
-            // Add columns to the DataTable
+
             int columnCount = matAdjacence.GetLength(1);
             for (int i = 0; i < columnCount; i++)
             {
                 dataTable.Columns.Add($"Noeud {i}");
             }
 
-            // Add rows to the DataTable
+
             int rowCount = matAdjacence.GetLength(0);
             for (int i = 0; i < rowCount; i++)
             {
@@ -69,7 +69,7 @@ namespace LivinParis
                 dataTable.Rows.Add(row);
             }
 
-            // Set the DataSource of the DataGridView
+
             dataGridViewMatAdjacence.DataSource = dataTable;
 
             foreach (DataGridViewColumn column in dataGridViewMatAdjacence.Columns)
@@ -342,17 +342,14 @@ namespace LivinParis
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            // Toggle the visibility of the DataGridView
             dataGridViewMatAdjacence.Visible = !dataGridViewMatAdjacence.Visible;
 
-            // Hide other UI elements
             TexteCheminDFS.Visible = false;
             PanelGraphe.Visible = false;
             TableauListeAdj.Visible = false;
             TexteCheminBFS.Visible = false;
             TexteProp.Visible = false;
 
-            // Update button texts
             BoutonCheminBFS.Text = (TexteCheminBFS.Visible) ? "Cacher Chemin BFS" : "Afficher Chemin BFS";
             BoutonCheminDFS.Text = (TexteCheminDFS.Visible) ? "Cacher Chemin DFS" : "Afficher Chemin DFS";
             BoutonAfficherGraphe.Text = (PanelGraphe.Visible) ? "Cacher Graphe" : "Afficher Graphe";
@@ -361,10 +358,6 @@ namespace LivinParis
             BoutonMat.Text = (dataGridViewMatAdjacence.Visible) ? "Cacher Matrice d'adjacence" : "Afficher Matrice d'adjacence";
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
 
 
 

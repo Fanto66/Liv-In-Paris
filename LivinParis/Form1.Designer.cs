@@ -120,7 +120,6 @@ namespace LivinParis
             this.TableauListeAdj.Size = new System.Drawing.Size(225, 153);
             this.TableauListeAdj.TabIndex = 0;
             this.TableauListeAdj.Visible = false;
-            this.TableauListeAdj.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // BoutonListeAdj
             // 
