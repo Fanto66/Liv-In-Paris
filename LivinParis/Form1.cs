@@ -15,6 +15,7 @@ namespace LivinParis
         // Facteur d'échelle pour le redimensionnement du graphe
         private int facteurEchelle = 300;
 
+        private bool connexe, cycle;
 
         private DataTable table = new DataTable();
 
@@ -45,7 +46,62 @@ namespace LivinParis
 
             // Bind the DataTable to the DataGridView
             TableauListeAdj.DataSource = table;
+
+            int[,] matAdjacence = graphe.MatAdjacence;
+            DataTable dataTable = new DataTable();
+
+            // Add columns to the DataTable
+            int columnCount = matAdjacence.GetLength(1);
+            for (int i = 0; i < columnCount; i++)
+            {
+                dataTable.Columns.Add($"Noeud {i}");
+            }
+
+            // Add rows to the DataTable
+            int rowCount = matAdjacence.GetLength(0);
+            for (int i = 0; i < rowCount; i++)
+            {
+                DataRow row = dataTable.NewRow();
+                for (int j = 0; j < columnCount; j++)
+                {
+                    row[$"Noeud {j}"] = matAdjacence[i, j];
+                }
+                dataTable.Rows.Add(row);
+            }
+
+            // Set the DataSource of the DataGridView
+            dataGridViewMatAdjacence.DataSource = dataTable;
+
+            foreach (DataGridViewColumn column in dataGridViewMatAdjacence.Columns)
+            {
+                column.SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
+
+            dataGridViewMatAdjacence.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
         }
+
+
+        public bool Connexe
+        {
+            get { return connexe; }
+            set
+            {
+                connexe = value;
+                TexteProp.Text = ((connexe) ? "Le graphe est connexe" : "Le graphe n'est pas connexe")+((cycle)? " et contient un cycle" : " et contient pas de cycle.");
+            }
+        }
+
+        public bool Cycle
+        {
+            get { return cycle; }
+            set
+            {
+                cycle = value;
+                TexteProp.Text = ((connexe) ? "Le graphe est connexe" : "Le graphe n'est pas connexe") + ((cycle) ? " et contient un cycle" : " et contient pas de cycle.");
+            }
+        }
+
+
 
         /// <summary>
         /// Propriété pour obtenir ou définir le texte du label de chemin DFS.
@@ -53,7 +109,13 @@ namespace LivinParis
         public string TexteCheminDFSLabel
         {
             get { return TexteCheminDFS.Text; }
-            set { TexteCheminDFS.Text = "Chemin suivi: " + value; }
+            set { TexteCheminDFS.Text = "Chemin  DFS suivi: " + value; }
+        }
+
+        public string TexteCheminBFSLabel
+        {
+            get { return TexteCheminBFS.Text; }
+            set { TexteCheminBFS.Text = "Chemin BFS suivi: " + value; }
         }
 
         /// <summary>
@@ -65,10 +127,16 @@ namespace LivinParis
             TexteCheminDFS.Visible = !TexteCheminDFS.Visible;
             PanelGraphe.Visible = false;
             TableauListeAdj.Visible = false;
+            TexteCheminBFS.Visible = false;
+            TexteProp.Visible = false;
+            dataGridViewMatAdjacence.Visible = false;
 
+            BoutonCheminBFS.Text = (TexteCheminBFS.Visible) ? "Cacher Chemin BFS" : "Afficher Chemin BFS";
             BoutonCheminDFS.Text = (TexteCheminDFS.Visible) ? "Cacher Chemin DFS" : "Afficher Chemin DFS";
             BoutonAfficherGraphe.Text = (PanelGraphe.Visible) ? "Cacher Graphe" : "Afficher Graphe";
             BoutonListeAdj.Text = (TableauListeAdj.Visible) ? "Cacher Liste d'adjacence" : "Afficher Liste d'adjacence";
+            BoutonProp.Text = (TexteProp.Visible) ? "Cacher Propriétés" : "Afficher Propriétés";
+            BoutonMat.Text = (dataGridViewMatAdjacence.Visible) ? "Cacher Matrice d'adjacence" : "Afficher Matrice d'adjacence";
 
         }
 
@@ -81,10 +149,17 @@ namespace LivinParis
             PanelGraphe.Visible = !PanelGraphe.Visible;
             TexteCheminDFS.Visible = false;
             TableauListeAdj.Visible = false;
+            TexteCheminBFS.Visible = false;
+            TexteProp.Visible = false;
+            dataGridViewMatAdjacence.Visible = false;
 
-            BoutonAfficherGraphe.Text = (PanelGraphe.Visible) ? "Cacher Graphe" : "Afficher Graphe";
+            BoutonCheminBFS.Text = (TexteCheminBFS.Visible) ? "Cacher Chemin BFS" : "Afficher Chemin BFS";
             BoutonCheminDFS.Text = (TexteCheminDFS.Visible) ? "Cacher Chemin DFS" : "Afficher Chemin DFS";
+            BoutonAfficherGraphe.Text = (PanelGraphe.Visible) ? "Cacher Graphe" : "Afficher Graphe";
             BoutonListeAdj.Text = (TableauListeAdj.Visible) ? "Cacher Liste d'adjacence" : "Afficher Liste d'adjacence";
+            BoutonProp.Text = (TexteProp.Visible) ? "Cacher Propriétés" : "Afficher Propriétés";
+            BoutonMat.Text = (dataGridViewMatAdjacence.Visible) ? "Cacher Matrice d'adjacence" : "Afficher Matrice d'adjacence";
+
 
             if (PanelGraphe.Visible)
             {
@@ -97,15 +172,36 @@ namespace LivinParis
         {
             PanelGraphe.Visible = false;
             TexteCheminDFS.Visible = false;
+            TexteCheminBFS.Visible = false;
             TableauListeAdj.Visible = !TableauListeAdj.Visible;
+            TexteProp.Visible = false;
+            dataGridViewMatAdjacence.Visible = false;
 
-            BoutonAfficherGraphe.Text = (PanelGraphe.Visible) ? "Cacher Graphe" : "Afficher Graphe";
+            BoutonCheminBFS.Text = (TexteCheminBFS.Visible) ? "Cacher Chemin BFS" : "Afficher Chemin BFS";
             BoutonCheminDFS.Text = (TexteCheminDFS.Visible) ? "Cacher Chemin DFS" : "Afficher Chemin DFS";
+            BoutonAfficherGraphe.Text = (PanelGraphe.Visible) ? "Cacher Graphe" : "Afficher Graphe";
             BoutonListeAdj.Text = (TableauListeAdj.Visible) ? "Cacher Liste d'adjacence" : "Afficher Liste d'adjacence";
+            BoutonProp.Text = (TexteProp.Visible) ? "Cacher Propriétés" : "Afficher Propriétés";
+            BoutonMat.Text = (dataGridViewMatAdjacence.Visible) ? "Cacher Matrice d'adjacence" : "Afficher Matrice d'adjacence";
         }
 
 
+        private void BoutonBFSClick(object sender, EventArgs e)
+        {
+            TexteCheminBFS.Visible = !TexteCheminBFS.Visible;
+            PanelGraphe.Visible = false;
+            TableauListeAdj.Visible = false;
+            TexteCheminDFS.Visible = false;
+            TexteProp.Visible = false;
+            dataGridViewMatAdjacence.Visible = false;
 
+            BoutonCheminBFS.Text = (TexteCheminBFS.Visible) ? "Cacher Chemin BFS" : "Afficher Chemin BFS";
+            BoutonCheminDFS.Text = (TexteCheminDFS.Visible) ? "Cacher Chemin DFS" : "Afficher Chemin DFS";
+            BoutonAfficherGraphe.Text = (PanelGraphe.Visible) ? "Cacher Graphe" : "Afficher Graphe";
+            BoutonListeAdj.Text = (TableauListeAdj.Visible) ? "Cacher Liste d'adjacence" : "Afficher Liste d'adjacence";
+            BoutonProp.Text = (TexteProp.Visible) ? "Cacher Propriétés" : "Afficher Propriétés";
+            BoutonMat.Text = (dataGridViewMatAdjacence.Visible) ? "Cacher Matrice d'adjacence" : "Afficher Matrice d'adjacence";
+        }
 
         /// <summary>
         /// Gestionnaire d'événements pour le chargement du formulaire.
@@ -228,10 +324,48 @@ namespace LivinParis
             }
         }
 
+        private void BoutonProp_Click(object sender, EventArgs e)
+        {
+            TexteProp.Visible = !TexteProp.Visible;
+            TexteCheminBFS.Visible = false;
+            PanelGraphe.Visible = false;
+            TableauListeAdj.Visible = false;
+            TexteCheminDFS.Visible = false;
+            dataGridViewMatAdjacence.Visible = false;
+
+            BoutonCheminBFS.Text = (TexteCheminBFS.Visible) ? "Cacher Chemin BFS" : "Afficher Chemin BFS";
+            BoutonCheminDFS.Text = (TexteCheminDFS.Visible) ? "Cacher Chemin DFS" : "Afficher Chemin DFS";
+            BoutonAfficherGraphe.Text = (PanelGraphe.Visible) ? "Cacher Graphe" : "Afficher Graphe";
+            BoutonListeAdj.Text = (TableauListeAdj.Visible) ? "Cacher Liste d'adjacence" : "Afficher Liste d'adjacence";
+            BoutonProp.Text = (TexteProp.Visible) ? "Cacher Propriétés" : "Afficher Propriétés";
+            BoutonMat.Text = (dataGridViewMatAdjacence.Visible) ? "Cacher Matrice d'adjacence" : "Afficher Matrice d'adjacence";
+        }
+        private void button1_Click(object sender, EventArgs e)
+        {
+            // Toggle the visibility of the DataGridView
+            dataGridViewMatAdjacence.Visible = !dataGridViewMatAdjacence.Visible;
+
+            // Hide other UI elements
+            TexteCheminDFS.Visible = false;
+            PanelGraphe.Visible = false;
+            TableauListeAdj.Visible = false;
+            TexteCheminBFS.Visible = false;
+            TexteProp.Visible = false;
+
+            // Update button texts
+            BoutonCheminBFS.Text = (TexteCheminBFS.Visible) ? "Cacher Chemin BFS" : "Afficher Chemin BFS";
+            BoutonCheminDFS.Text = (TexteCheminDFS.Visible) ? "Cacher Chemin DFS" : "Afficher Chemin DFS";
+            BoutonAfficherGraphe.Text = (PanelGraphe.Visible) ? "Cacher Graphe" : "Afficher Graphe";
+            BoutonListeAdj.Text = (TableauListeAdj.Visible) ? "Cacher Liste d'adjacence" : "Afficher Liste d'adjacence";
+            BoutonProp.Text = (TexteProp.Visible) ? "Cacher Propriétés" : "Afficher Propriétés";
+            BoutonMat.Text = (dataGridViewMatAdjacence.Visible) ? "Cacher Matrice d'adjacence" : "Afficher Matrice d'adjacence";
+        }
+
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }
+
 
 
 
